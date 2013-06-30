@@ -1,7 +1,7 @@
 ADROVMapper
 ===========
 
-iOS - Map objects to corresponding views / view controllers and back
+iOS - Map objects to corresponding views / view controllers and back. This won't take care of all cases (for example, custom pickers), but in my experience handles most object/view bindings quite well.
 
 Step 1: Make sure your views' properties match your objects' properties
 Example: If you have an Employee object with properties firstName, lastName, and hireDate, your corresponding view's properties (whether they are labels, text fields, etc) should be named EXACTLY the same
