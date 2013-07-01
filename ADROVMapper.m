@@ -338,11 +338,6 @@ typedef enum {
         switch (updateType) {
             case ADROVObjectUpdate:
                 [self updateObjectValue:objectValue withControl:control propertyKey:propertyKey];
-                if ([self.object isKindOfClass:[NSManagedObject class]] && self.autoSaveManagedObjects) {
-                    NSError *error;
-                    NSManagedObjectContext *context = [self.object managedObjectContext];
-                    [context save:&error];
-                }
                 break;
             case ADROVViewUpdate:
                 [self updateControl:control withObjectValue:objectValue propertyKey:propertyKey];
