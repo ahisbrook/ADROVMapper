@@ -120,7 +120,6 @@ typedef enum {
             [nf setMinimumFractionDigits:2];
         }
         objectValue = [nf numberFromString:[control text]];
-        NSLog(@"CURRENCY VALUE: %@", objectValue);
         nf = nil;
         return objectValue;;
     }
@@ -231,7 +230,6 @@ typedef enum {
         NSNumberFormatter *cnf = [NSNumberFormatter new];
         [cnf setNumberStyle:NSNumberFormatterCurrencyStyle];
         [control setText:[cnf stringFromNumber:objectValue]];
-        NSLog(@"CURRENCY TEXT: %@", [control text]);
         cnf = nil;
     }
     else if (isDate) {
@@ -345,7 +343,6 @@ typedef enum {
                     NSManagedObjectContext *context = [self.object managedObjectContext];
                     [context save:&error];
                 }
-                NSLog(@"%@", objectValue);
                 break;
             case ADROVViewUpdate:
                 [self updateControl:control withObjectValue:objectValue propertyKey:propertyKey];
