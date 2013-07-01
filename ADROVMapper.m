@@ -349,6 +349,13 @@ typedef enum {
                 break;
         }
     }
+    if (updateType == ADROVObjectUpdate) {
+        if ([self.object isKindOfClass:[NSManagedObject class]] && self.autoSaveManagedObjects) {
+            NSError *error;
+            NSManagedObjectContext *context = [self.object managedObjectContext];
+            [context save:&error];
+        }
+    }
 }
 
 
