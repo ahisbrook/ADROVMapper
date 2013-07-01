@@ -11,6 +11,7 @@
 @property (weak, nonatomic) id object;
 @property (nonatomic) NSString *dateFormat;
 @property (nonatomic) NSArray *currencyTags;
+@property (nonatomic) BOOL autoSaveManagedObjects;
 
 + (ADROVMapper*)mapperWithView:(id)view object:(id)object;
 + (ADROVMapper*)mapperWithView:(id)view object:(id)object dateFormat:(NSString*)dateFormat;

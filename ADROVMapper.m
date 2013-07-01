@@ -9,6 +9,7 @@
 
 #import "ADROVMapper.h"
 #import <objc/runtime.h>
+#import <CoreData/CoreData.h>
 
 @interface ADROVMapper()
 @property (nonatomic) NSArray * mappedKeys;
@@ -29,6 +30,7 @@ typedef enum {
         self.object = object;
         self.dateFormat = dateFormat;
         self.currencyTags = currencyTags;
+        self.autoSaveManagedObjects = YES;
     }
     return self;
 }
@@ -103,6 +105,8 @@ typedef enum {
     
     return theProperties;
 }
+
+// Update object values
 
 - (void)updateObjectValue:(id)objectValue withTextControl:(id)control isDate:(BOOL)isDate isCurrency:(BOOL)isCurrency {
     if (isCurrency) {
@@ -206,6 +210,8 @@ typedef enum {
         return;
     }
 }
+
+// Update controls
 
 - (void)updateTextControl:(id)control withObjectValue:(id)objectValue isDate:(BOOL)isDate isCurrency:(BOOL)isCurrency {
     if (isCurrency) {
@@ -320,6 +326,11 @@ typedef enum {
         switch (updateType) {
             case ADROVObjectUpdate:
                 [self updateObjectValue:objectValue withControl:control propertyKey:propertyKey];
+                if ([self.object isKindOfClass:[NSManagedObject class]] && self.autoSaveManagedObjects) {
+                    NSError *error;
+                    NSManagedObjectContext *context = [self.object managedObjectContext];
+                    [context save:&error];
+                }
                 break;
             case ADROVViewUpdate:
                 [self updateControl:control withObjectValue:objectValue propertyKey:propertyKey];
