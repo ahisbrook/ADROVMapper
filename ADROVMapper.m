@@ -108,7 +108,7 @@ typedef enum {
 
 // Update object values
 
-- (void)updateObjectValue:(id)objectValue withTextControl:(id)control isDate:(BOOL)isDate isCurrency:(BOOL)isCurrency {
+- (id)updateObjectValue:(id)objectValue withTextControl:(id)control isDate:(BOOL)isDate isCurrency:(BOOL)isCurrency {
     if (isCurrency) {
         NSNumberFormatter *nf = [NSNumberFormatter new];
         if ([self string:[control text] containsSubstring:@"$"]) {
@@ -120,43 +120,50 @@ typedef enum {
             [nf setMinimumFractionDigits:2];
         }
         objectValue = [nf numberFromString:[control text]];
+        NSLog(@"CURRENCY VALUE: %@", objectValue);
         nf = nil;
+        return objectValue;;
     }
     else if (isDate) {
         NSDateFormatter *df = [NSDateFormatter new];
         [df setDateFormat:self.dateFormat];
         objectValue = [df dateFromString:[control text]];
         df = nil;
+        return objectValue;;
     }
     else {
         objectValue = [control text];
+        return objectValue;;
     }
 }
-- (void)updateObjectValue:(id)objectValue withImageView:(id)control {
+- (id)updateObjectValue:(id)objectValue withImageView:(id)control {
     if ([objectValue isKindOfClass:[UIImage class]]) {
         objectValue = [(UIImageView*)control image];
     }
+    return objectValue;
 }
-- (void)updateObjectValue:(id)objectValue withSlider:(id)control {
+- (id)updateObjectValue:(id)objectValue withSlider:(id)control {
     objectValue = [NSNumber numberWithFloat:[(UISlider*)control value]];
+    return objectValue;
 }
-- (void)updateObjectValue:(id)objectValue withSwitch:(id)control {
+- (id)updateObjectValue:(id)objectValue withSwitch:(id)control {
     objectValue = [NSNumber numberWithBool:[control isOn]];
+    return objectValue;
 }
-- (void)updateObjectValue:(id)objectValue withSegmentedControl:(id)control {
-    BOOL found = NO;
+- (id)updateObjectValue:(id)objectValue withSegmentedControl:(id)control {
     if ([objectValue isKindOfClass:[NSString class]]) {
         objectValue = [control titleForSegmentAtIndex:[control selectedSegmentIndex]];
-        found = YES;
+        return objectValue;
     }
-    if (!found) {
-        if ([objectValue isKindOfClass:[NSNumber class]]) {
-            objectValue = [NSNumber numberWithInt:[control selectedSegmentIndex]];
-        }
+    if ([objectValue isKindOfClass:[NSNumber class]]) {
+        objectValue = [NSNumber numberWithInt:[control selectedSegmentIndex]];
+        return objectValue;
     }
+    return nil;
 }
-- (void)updateObjectValue:(id)objectValue withDatePicker:(id)control {
+- (id)updateObjectValue:(id)objectValue withDatePicker:(id)control {
     objectValue = [control date];
+    return objectValue;
 }
 
 - (void)updateObjectValue:(id)objectValue withControl:(id)control propertyKey:(NSString*)propertyKey {
@@ -174,39 +181,45 @@ typedef enum {
                 }
             }
         }
-        [self updateObjectValue:objectValue withTextControl:control isDate:isDate isCurrency:isCurrency];
+        id newValue = [self updateObjectValue:objectValue withTextControl:control isDate:isDate isCurrency:isCurrency];
+        [self.object setValue:newValue forKeyPath:propertyKey];
         return;
     }
     
     if ([control isKindOfClass:[UIImageView class]])
     {
-        [self updateObjectValue:objectValue withImageView:control ];
+        id newValue = [self updateObjectValue:objectValue withImageView:control];
+        [self.object setValue:newValue forKeyPath:propertyKey];
         return;
     }
     
     if ([control isKindOfClass:[UISlider class]] &&
         [objectValue isKindOfClass:[NSNumber class]])
     {
-        [self updateObjectValue:objectValue withSlider:control];
+        id newValue = [self updateObjectValue:objectValue withSlider:control];
+        [self.object setValue:newValue forKeyPath:propertyKey];
         return;
     }
     
     if ([control isKindOfClass:[UISwitch class]] &&
         [objectValue isKindOfClass:[NSNumber class]])
     {
-        [self updateObjectValue:objectValue withSwitch:control];
+        id newValue = [self updateObjectValue:objectValue withSwitch:control];
+        [self.object setValue:newValue forKeyPath:propertyKey];
         return;
     }
     
     if ([control isKindOfClass:[UISegmentedControl class]])
     {
-        [self updateObjectValue:objectValue withSegmentedControl:control];
+        id newValue = [self updateObjectValue:objectValue withSegmentedControl:control];
+        [self.object setValue:newValue forKeyPath:propertyKey];
         return;
     }
     
     if ([control isKindOfClass:[UIDatePicker class]])
     {
-        [self updateObjectValue:objectValue withDatePicker:control];
+        id newValue = [self updateObjectValue:objectValue withDatePicker:control];
+        [self.object setValue:newValue forKeyPath:propertyKey];
         return;
     }
 }
@@ -218,6 +231,7 @@ typedef enum {
         NSNumberFormatter *cnf = [NSNumberFormatter new];
         [cnf setNumberStyle:NSNumberFormatterCurrencyStyle];
         [control setText:[cnf stringFromNumber:objectValue]];
+        NSLog(@"CURRENCY TEXT: %@", [control text]);
         cnf = nil;
     }
     else if (isDate) {
@@ -331,6 +345,7 @@ typedef enum {
                     NSManagedObjectContext *context = [self.object managedObjectContext];
                     [context save:&error];
                 }
+                NSLog(@"%@", objectValue);
                 break;
             case ADROVViewUpdate:
                 [self updateControl:control withObjectValue:objectValue propertyKey:propertyKey];
