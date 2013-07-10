@@ -4,7 +4,6 @@
 //
 
 #define DEFAULT_DATE_FORMAT @"MM/dd/yyyy"
-#define DEFAULT_DATE_TAGS @[@"date"]
 #define DEFAULT_CURRENCY_TAGS @[@"amount", @"balance", @"price", @"msrp"]
 
 #import "ADROVMapper.h"
@@ -83,7 +82,7 @@ typedef enum {
     objectProperties = nil;
 }
 
-// Private
+// Private 
 - (BOOL)string:(NSString*)string containsSubstring:(NSString*)subString {
     NSRange range = [string rangeOfString:subString];
     BOOL found = (range.location != NSNotFound );
