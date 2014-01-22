@@ -16,4 +16,4 @@ DATE FORMAT: The default date format for going from an NSDate property to a text
 
 CURRENCY TAGS: ADROVMapper uses special strings to determine if a property should be formatted as currency for display in a text UI property (label, text field, etc). The default currency tags are "amount", "balance", "price" and "msrp". These tags should be contained in the name of the property (for example, "unitPrice" or "totalChargeAmount"). You can change the defaults in the ADROVMapper.m file or specify your own currency tags when creating the mapper object, or set them later.
 
-MANAGED OBJECTS: By default, ADROVMapper will attempt to save managed objects. To turn this off, set the property autoSaveManagedObjects to NO.
+MANAGED OBJECTS: By default, ADROVMapper will attempt to save any managed (CoreData) objects. To turn this off, set the property autoSaveManagedObjects to NO.
